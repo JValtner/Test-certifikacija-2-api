@@ -28,6 +28,8 @@ public class ProjectRepository : IProjectRepository
     public async Task<List<Project>> GetByUserIdAsync(string userId, bool onlyActive)
     {
         IQueryable<Project> query = _context.Projects
+            .Include(p => p.UserProjectSkills)
+                .ThenInclude(ps => ps.Skill)
             .Where(p => p.UserId == userId);
 
         if (onlyActive)

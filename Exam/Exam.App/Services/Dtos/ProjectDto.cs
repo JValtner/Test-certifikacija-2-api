@@ -11,4 +11,5 @@ public class ProjectDto
     public DateTime? CompletedAt { get; set; }
     public ProjectStatus? Status { get; set; }
     public string? UserId { get; set; }
+    public List<UserProjectSkillDto> Skills { get; set; } = new();
 }

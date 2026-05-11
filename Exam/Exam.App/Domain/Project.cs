@@ -9,4 +9,5 @@ public class Project
     public DateTime? CompletedAt { get; set; }
     public ProjectStatus Status { get; set; }
     public string UserId { get; set; }
+    public List<UserProjectSkill> UserProjectSkills { get; set; } = new();
 }
