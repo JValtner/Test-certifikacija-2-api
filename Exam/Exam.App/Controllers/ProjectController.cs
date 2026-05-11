@@ -21,7 +21,7 @@ public class ProjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ProjectDto dto)
     {
-        var username = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var username = User.FindFirstValue(ClaimTypes.NameIdentifier);//1-6 zadatak nedozvoljen pristup
         var result = await _projectService.CreateAsync(dto, username);
         return Ok(result);
     }
@@ -29,6 +29,11 @@ public class ProjectController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] ProjectDto dto)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+            return Unauthorized("Nedozvoljen pristup");
+
         var result = await _projectService.UpdateAsync(id, dto);
         return Ok(result);
     }
@@ -36,6 +41,11 @@ public class ProjectController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+            return Unauthorized("Nedozvoljen pristup");
+
         await _projectService.DeleteAsync(id);
         return Ok();
     }
@@ -43,6 +53,14 @@ public class ProjectController : ControllerBase
     [HttpGet("users/{userId}")]
     public async Task<IActionResult> GetByUser(string userId)
     {
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (currentUserId == null)
+            return Unauthorized("Nedozvoljen pristup");
+
+        if (userId != currentUserId)
+            return Forbid("Nemate dozvolu za pristup projektima drugog korisnika.");
+
         var result = await _projectService.GetByUserIdAsync(userId, false);
         return Ok(result);
     }
@@ -50,7 +68,14 @@ public class ProjectController : ControllerBase
     [HttpGet("mine")]
     public async Task<IActionResult> GetMine()
     {
-        var username = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var username = User.FindFirstValue(ClaimTypes.Name)
+         ?? User.Identity?.Name;
+
+        if (username == null)
+        {
+            return Unauthorized("Nedozvoljen pristup");
+        }
         var result = await _projectService.GetOwnedAsync(username);
         return Ok(result);
     }
@@ -71,6 +96,11 @@ public class ProjectController : ControllerBase
     [HttpPost("{projectId}/lock")]
     public async Task<IActionResult> LockProject(int projectId)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+            return Unauthorized();
+
         var result = await _projectService.LockProjectAsync(projectId);
         return Ok(result);
     }
@@ -78,6 +108,11 @@ public class ProjectController : ControllerBase
     [HttpPost("{projectId}/unlock")]
     public async Task<IActionResult> UnLockProject(int projectId)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+            return Unauthorized();
+
         var result = await _projectService.UnLockProjectAsync(projectId);
         return Ok(result);
     }
