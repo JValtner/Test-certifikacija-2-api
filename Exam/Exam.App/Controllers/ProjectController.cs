@@ -115,4 +115,11 @@ public class ProjectController : ControllerBase
         var result = await _projectService.UnLockProjectAsync(projectId);
         return Ok(result);
     }
+
+    [HttpGet("users/{userId}/completed-by-skill/{skillId}")]
+    public async Task<IActionResult> GetCompletedByUserAndSkill(string userId, int skillId)
+    {
+        var result = await _projectService.GetCompletedByUserAndSkillAsync(userId, skillId);
+        return Ok(result);
+    }
 }

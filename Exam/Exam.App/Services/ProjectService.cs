@@ -1,6 +1,7 @@
 using AutoMapper;
 using Exam.App.Domain;
 using Exam.App.Domain.Repositories;
+using Exam.App.Migrations;
 using Exam.App.Services.Dtos;
 using Exam.App.Services.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -109,5 +110,10 @@ public class ProjectService : IProjectService
     public async Task<List<ProjectDto>> GetActiveAsync(string userId)
     {
         return await GetByUserIdAsync(userId, true);
+    }
+    public async Task<List<ProjectDto>>GetCompletedByUserAndSkillAsync(string userId, int skillId)
+    {
+        var projects = await _projectRepository.GetCompletedByUserAndSkillAsync(userId, skillId);
+        return _mapper.Map<List<ProjectDto>>(projects);
     }
 }

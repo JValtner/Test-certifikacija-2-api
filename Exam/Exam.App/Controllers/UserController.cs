@@ -17,9 +17,14 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] int? skillId = null)
     {
-        var result = await _userService.GetAllUsersAsync(page, pageSize);
+        var result = await _userService.GetAllUsersAsync(page, pageSize, skillId);
         return Ok(result);
     }
+
+
 }

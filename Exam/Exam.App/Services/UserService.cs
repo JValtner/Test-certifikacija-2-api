@@ -16,9 +16,12 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<PaginatedListDto<ProfileDto>> GetAllUsersAsync(int page, int pageSize)
+    public async Task<PaginatedListDto<ProfileDto>> GetAllUsersAsync(
+    int page,
+    int pageSize,
+    int? skillId)
     {
-        var paginatedUsers = await _userRepository.GetAllUsersAsync(page, pageSize);
+        var paginatedUsers = await _userRepository.GetAllUsersAsync(page, pageSize, skillId);
 
         var profileDtos = _mapper.Map<List<ProfileDto>>(paginatedUsers.Items);
 

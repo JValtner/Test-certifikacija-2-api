@@ -13,4 +13,5 @@ public interface IProjectService
     Task<ProjectDto> StartProjectAsync(int id);
     Task<ProjectDto> LockProjectAsync(int id);
     Task<ProjectDto> UnLockProjectAsync(int id);
+    Task<List<ProjectDto>> GetCompletedByUserAndSkillAsync(string userId, int skillId);
 }

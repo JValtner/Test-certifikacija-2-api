@@ -23,13 +23,13 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(p => p.UserId);
         //3 zadatak poveznik M:N
         modelBuilder.Entity<UserProjectSkill>()
-        .HasOne(x => x.User)
-        .WithMany()
-        .HasForeignKey(x => x.UserId);
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId);
 
         modelBuilder.Entity<UserProjectSkill>()
             .HasOne(x => x.Project)
-            .WithMany()
+            .WithMany(p => p.UserProjectSkills)
             .HasForeignKey(x => x.ProjectId);
 
         modelBuilder.Entity<UserProjectSkill>()
@@ -37,7 +37,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(x => x.SkillId);
 
-         modelBuilder.Entity<UserProjectSkill>()
+        modelBuilder.Entity<UserProjectSkill>()
             .HasIndex(x => new { x.UserId, x.ProjectId, x.SkillId })
             .IsUnique();
         // Seed Roles

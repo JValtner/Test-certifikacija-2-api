@@ -4,8 +4,6 @@ namespace Exam.App.Domain.Repositories;
 
 public interface IUserRepository
 {
-    Task<PaginatedList<ProfileDto>> GetAllUsersAsync(
-    int page,
-    int pageSize);
+    Task<PaginatedList<ProfileDto>> GetAllUsersAsync(int page, int pageSize, int? skillId);
     Task<ApplicationUser?> GetByUsernameAsync(string username);
 }

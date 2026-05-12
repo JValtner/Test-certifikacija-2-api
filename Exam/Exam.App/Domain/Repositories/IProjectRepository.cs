@@ -7,4 +7,5 @@ public interface IProjectRepository
     Task<List<Project>> GetByUserIdAsync(string userId, bool onlyActive);
     Task UpdateAsync(Project project);
     Task DeleteAsync(int id);
+    Task<List<Project>> GetCompletedByUserAndSkillAsync(string userId, int skillId);
 }

@@ -57,5 +57,16 @@ public class ProjectRepository : IProjectRepository
             await _context.SaveChangesAsync();
         }
     }
-    
+    public async Task<List<Project>> GetCompletedByUserAndSkillAsync(string userId, int skillId)
+    {
+        return await _context.Projects
+            .Include(p => p.UserProjectSkills)
+                .ThenInclude(ups => ups.Skill)
+            .Where(p =>
+                p.UserId == userId &&
+                p.Status == ProjectStatus.Completed &&
+                p.UserProjectSkills.Any(ups => ups.SkillId == skillId))
+            .ToListAsync();
+    }
+
 }

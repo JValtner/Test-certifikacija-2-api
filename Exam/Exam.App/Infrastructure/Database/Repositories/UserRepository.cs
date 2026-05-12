@@ -14,7 +14,7 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<PaginatedList<ProfileDto>> GetAllUsersAsync(int page, int pageSize)
+    public async Task<PaginatedList<ProfileDto>> GetAllUsersAsync(int page, int pageSize, int? skillId)
     {
         //Izbaci Admine
         var administratorRoleId = await _context.Roles
@@ -30,6 +30,14 @@ public class UserRepository : IUserRepository
                 !_context.UserRoles.Any(ur =>
                     ur.UserId == u.Id &&
                     ur.RoleId == administratorRoleId));
+        }
+        if (skillId.HasValue)
+        {
+            usersQuery = usersQuery.Where(u =>
+                _context.UserProjectSkills.Any(ups =>
+                    ups.UserId == u.Id &&
+                    ups.SkillId == skillId.Value &&
+                    ups.Project.Status == ProjectStatus.Completed));
         }
         //ukljuci statistike
         var query = usersQuery.Select(u => new ProfileDto
