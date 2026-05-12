@@ -41,9 +41,9 @@ public class ProjectController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userName = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (userId == null)
+        if (userName == null)
             return Unauthorized("Nedozvoljen pristup");
 
         await _projectService.DeleteAsync(id);
@@ -69,8 +69,7 @@ public class ProjectController : ControllerBase
     public async Task<IActionResult> GetMine()
     {
 
-        var username = User.FindFirstValue(ClaimTypes.Name)
-         ?? User.Identity?.Name;
+        var username = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (username == null)
         {

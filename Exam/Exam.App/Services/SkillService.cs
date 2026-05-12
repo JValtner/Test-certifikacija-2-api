@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Exam.App.Domain;
 using Exam.App.Domain.Repositories;
+using Exam.App.Infrastructure.Database.Repositories;
 using Exam.App.Services.Dtos;
 using Exam.App.Services.Exceptions;
 
@@ -10,15 +11,18 @@ public class SkillService : ISkillService
 {
     private readonly ISkillRepository _skillRepository;
     private readonly IProjectRepository _projectRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
     public SkillService(
         ISkillRepository skillRepository,
         IProjectRepository projectRepository,
+        IUserRepository userRepository,
         IMapper mapper)
     {
         _skillRepository = skillRepository;
         _projectRepository = projectRepository;
+        _userRepository = userRepository;
         _mapper = mapper;
     }
 
@@ -29,10 +33,17 @@ public class SkillService : ISkillService
     }
 
     public async Task<UserProjectSkillDto> AddSkillToProjectAsync(
-        int projectId,
-        string userId,
-        CreateUserProjectSkillDto dto)
+    int projectId,
+    string username,
+    CreateUserProjectSkillDto dto)
     {
+        var user = await _userRepository.GetByUsernameAsync(username);
+
+        if (user == null)
+            throw new UnauthorizedAccessException("Korisnik nije pronađen.");
+
+        var userId = user.Id;
+
         var project = await _projectRepository.GetByIdAsync(projectId);
 
         if (project == null)

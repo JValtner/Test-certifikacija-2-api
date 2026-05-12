@@ -70,4 +70,9 @@ public class UserRepository : IUserRepository
 
         return new PaginatedList<ProfileDto>(items, page, pageSize, totalCount);
     }
+    public async Task<ApplicationUser?> GetByUsernameAsync(string username)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.UserName == username);
+    }
 }

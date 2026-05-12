@@ -7,4 +7,5 @@ public interface IUserRepository
     Task<PaginatedList<ProfileDto>> GetAllUsersAsync(
     int page,
     int pageSize);
+    Task<ApplicationUser?> GetByUsernameAsync(string username);
 }

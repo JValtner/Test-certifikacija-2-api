@@ -25,19 +25,19 @@ public class SkillController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("projects/{projectId}")]
+    [HttpPost("add-skill-to-project/{projectId}")]
     public async Task<IActionResult> AddSkillToProject(
         int projectId,
         [FromBody] CreateUserProjectSkillDto dto)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userName = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (userId == null)
+        if (userName == null)
             return Unauthorized("Nedozvoljen pristup");
 
         var result = await _skillService.AddSkillToProjectAsync(
             projectId,
-            userId,
+            userName,
             dto);
 
         return Ok(result);

@@ -1,6 +1,7 @@
 using Exam.App;
 using Exam.App.Controllers.Middleware;
 using Exam.App.Domain.Repositories;
+using Exam.App.Infrastructure;
 using Exam.App.Infrastructure.Database;
 using Exam.App.Infrastructure.Database.Repositories;
 using Exam.App.Services;
@@ -27,6 +28,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+builder.Services.AddScoped<ISkillService, SkillService>();
 
 
 
